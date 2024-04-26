@@ -1,5 +1,6 @@
 import express, { Application } from 'express';
 import routesPersonas from '../routes/persona.routes';
+import connection from '../db/connection';
 
 class Server{
     private app: Application;
@@ -9,7 +10,8 @@ class Server{
         this.app = express();
         this.port = process.env.PORT || '4000';
         this.middelwares();
-        this.routes();  
+        this.routes(); 
+        this.conectarDB(); 
     }
 
     listen(){
@@ -25,6 +27,13 @@ class Server{
     middelwares(){
         //convertir el body a objeto por lo que recibimos de tipo json
         this.app.use(express.json());
+    }
+
+    conectarDB(){
+        connection.connect((err) =>{
+            if(err) throw err;
+            console.log('conectado a la base de datos');
+        })
     }
 }
 
