@@ -1,44 +1,59 @@
 import { Request, Response, request } from 'express';
+import connection from '../db/connection';
 
 export const getPersonas = (req: Request , res: Response) => {
-    res.json({
+
+        connection.query('select * from persona',(err,data) =>{
+            if(err) throw err;
+            res.json(data)
+        })
+    /*res.json({
         msg: "getPersonas"
-    })
+    })*/    
 }
 
 export const getPersona = (req: Request , res: Response) => {
    // console.log(req.params);
     const { id } = req.params;
-    res.json({
-        msg: "Obteniedo Persona",
-        id: id
+    connection.query('select * from persona where id=?',id,(err,data) =>{
+        if(err) throw err;
+        res.json(data[0])
+        //console.log(data[0])
     })
 }
 
 export const deletePersona = (req: Request , res: Response) => {
     // console.log(req.params);
     const { id } = req.params;
-    res.json({
-        msg: "Delete Persona",
-        id: id
+
+    connection.query('delete from persona where id=?',id,(err,data) =>{
+        if(err) throw err;
+        res.json({
+            msg: 'Persona eliminada con exito'
+        })
     })
 }
 
 export const postPersona = (req: Request , res: Response) => {
-    console.log(req.body)
+   // console.log(req.body)
     const { body } = req;
-    res.json({
-        msg: "post Persona",
-        body: body
+    connection.query('insert into persona set ?',[body],(err,data) =>{
+        if(err) throw err;
+        res.json({
+            msg: 'Persona agregada con exito'
+        })
     })
 }
 
 export const putPersona = (req: Request , res: Response) => {
     const { body } = req;
     const { id } = req.params;
-    res.json({
-        msg: "put Persona",
-        body: body, 
-        id: id
+
+    connection.query('update persona set? where id =?',[body,id], (err,data) => {
+        if (err) throw err;
+        
+        res.json({
+            msg: 'persona actualizada con exito'
+        })
     })
 }
