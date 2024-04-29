@@ -1,6 +1,7 @@
 import express, { Application } from 'express';
 import routesPersonas from '../routes/persona.routes';
 import connection from '../db/connection';
+import cors from 'cors'
 
 class Server{
     private app: Application;
@@ -27,6 +28,9 @@ class Server{
     middelwares(){
         //convertir el body a objeto por lo que recibimos de tipo json
         this.app.use(express.json());
+
+        //cors
+        this.app.use(cors());
     }
 
     conectarDB(){
